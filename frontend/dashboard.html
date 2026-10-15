@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>My URLs</h1>
+        <button id="logoutBtn">Logout</button>
+    </div>
+
+    <form id="createForm">
+        <input type="text" id="urlInput" placeholder="Paste a long URL" required>
+        <button type="submit">Shorten</button>
+    </form>
+
+    <p id="errorMsg" style="color: red;"></p>
+
+    <div id="linkList"></div>
+
+    <div>
+        <button id="prevBtn">Prev</button>
+        <span id="pageInfo"></span>
+        <button id="nextBtn">Next</button>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
