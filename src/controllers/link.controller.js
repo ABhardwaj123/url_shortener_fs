@@ -28,7 +28,7 @@ const createLink = async (req, res) => {
                     accessCount: link.accessCount
                 })
             } catch (err) {
-                throw err
+                if(err.code !== 11000) throw err
             }
         }
 
@@ -39,6 +39,16 @@ const createLink = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong" })
     }
 }
+
+const formatLink = (link) => ({
+    id: link._id,
+    url: link.url,
+    shortCode: link.shortCode,
+    shortUrl: `${process.env.BASE_URL}/${link.shortCode}`,
+    accessCount: link.accessCount,
+    createdAt: link.createdAt,
+    updatedAt: link.updatedAt
+})
 
 
 const getMyLinks = async (req, res) => {

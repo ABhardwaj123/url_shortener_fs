@@ -3,13 +3,13 @@ import helmet from "helmet"
 import authRouter from "./routes/auth.js"
 import linkRouter from "./routes/links.js";
 import redirectRouter from "./routes/redirect.js";
-
-
+import cors from "cors"
 
 
 const app = express()
 app.use(helmet())
 app.use(express.json())
+app.use(cors())
 
 app.use("/api/auth", authRouter)
 app.use("/api/links", linkRouter);
