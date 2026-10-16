@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken"
 const registerUser = async(req , res) => {
 
     try{
-
+        //object destructing
         const {email , password} = req.body
         if(!email || !validator.isEmail(email) || !password){
             return res.status(400).json({
@@ -24,6 +24,7 @@ const registerUser = async(req , res) => {
             })
         }
 
+        //saving the hashed password in database with 10 salt rounds
         const hashed_password = await bcrypt.hash(password , 10)
 
         const newUser = await User.create({
