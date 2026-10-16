@@ -4,6 +4,7 @@ import { createLink, getMyLinks, getLink, updateLink, deleteLink } from "../cont
 
 const router = Router();
 
+//using the middleware
 router.use(protect);          
 
 router.post("/", createLink);
@@ -11,9 +12,5 @@ router.get("/", getMyLinks);
 router.get("/:code", getLink);
 router.patch("/:code", updateLink);
 router.delete("/:code", deleteLink);
-
-
-router.post("/", createLink);
-router.get("/", getMyLinks);
 
 export default router;
