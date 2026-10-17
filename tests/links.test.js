@@ -33,6 +33,7 @@ test("no token is rejected" , async() => {
     expect(res.status).toBe(401)
 })
 
+//shortcut for 2 users and A owns the link 
 const setup = async () => {
     const tokenA = await makeUser("a@test.com")
     const tokenB = await makeUser("b@test.com")
@@ -44,6 +45,8 @@ const setup = async () => {
 }
 
 test("non-owner gets 404 on GET", async () => {
+    //takes only the required as we know A owns link
+    //to get 404 we need B
     const { tokenB, code } = await setup()
 
     const res = await request(app)
@@ -75,6 +78,7 @@ test("non-owner gets 404 on PATCH and DELETE, and the link survives", async () =
     expect(check.body.url).toBe("https://google.com/")   // not changed to wikipedia
 })
 
+//testing to see if respective users can see their links
 test("list only shows my own links", async () => {
     const tokenA = await makeUser("a@test.com")
     const tokenB = await makeUser("b@test.com")
