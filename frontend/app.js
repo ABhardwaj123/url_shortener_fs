@@ -21,6 +21,7 @@ async function apiRequest(endpoint , options = {}) {
     const token = getToken()
 
     const headers = {
+        //this tells the server that request body contains JSON data
         'Content-Type': 'application/json',
 
         //spreads any extra headers if passed
