@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Link details</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="dashboard-header">
@@ -16,9 +16,15 @@
 
     <div id="details" class="row"></div>
 
-    <!-- analytics section goes here later (Oct 26-29) -->
+    <h2>Clicks</h2>
+    <div>
+        <button id="range7" class="range-btn">7 days</button>
+        <button id="range30" class="range-btn">30 days</button>
+    </div>
+    <p id="total"></p>
+    <div id="chart"></div>
 
-    <script src="js/api.js"></script>
-    <script src="js/link.js"></script>
+    <script src="app.js"></script>
+    <script src="link.js"></script>
 </body>
 </html>

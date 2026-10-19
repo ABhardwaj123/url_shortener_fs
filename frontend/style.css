@@ -6,7 +6,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: #f5f6fa;
     color: #1a1a2e;
-    max-width: 640px;          /* wider so link rows fit */
+    max-width: 640px;
     margin: 60px auto;
     padding: 0 20px;
 }
@@ -16,7 +16,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-/* ---------- forms and inputs (login, register, create) ---------- */
+/* ---------- forms and inputs ---------- */
 form {
     display: flex;
     flex-direction: column;
@@ -39,6 +39,7 @@ input:focus {
     border-color: #4a4de7;
 }
 
+/* ---------- buttons ---------- */
 button {
     padding: 10px 12px;
     border: none;
@@ -58,6 +59,24 @@ button:disabled {
     cursor: not-allowed;
 }
 
+/* grey buttons */
+#logoutBtn,
+.range-btn,
+.row .details-btn,
+.row .copy-btn,
+.row .edit-btn {
+    background: #eee;
+    color: #1a1a2e;
+}
+
+#logoutBtn:hover,
+.range-btn:hover,
+.row .details-btn:hover,
+.row .copy-btn:hover,
+.row .edit-btn:hover {
+    background: #ddd;
+}
+
 #errorMsg {
     margin-top: 12px;
     font-size: 0.9rem;
@@ -75,16 +94,7 @@ button:disabled {
     margin: 0;
 }
 
-#logoutBtn {
-    background: #eee;
-    color: #1a1a2e;
-}
-
-#logoutBtn:hover {
-    background: #ddd;
-}
-
-/* ---------- link list ---------- */
+/* ---------- link list and details card ---------- */
 #linkList {
     display: flex;
     flex-direction: column;
@@ -131,25 +141,20 @@ button:disabled {
     font-size: 0.85rem;
 }
 
-/* small action buttons, pushed to the right of the meta line */
+/* small action buttons, pushed to the right */
 .row button {
     padding: 6px 12px;
     font-size: 0.85rem;
 }
 
+.row .details-btn,
 .row .copy-btn {
     margin-left: auto;
 }
 
-.row .copy-btn,
-.row .edit-btn {
-    background: #eee;
-    color: #1a1a2e;
-}
-
-.row .copy-btn:hover,
-.row .edit-btn:hover {
-    background: #ddd;
+/* when Details comes first (dashboard), Copy sits right next to it */
+.row .details-btn + .copy-btn {
+    margin-left: 0;
 }
 
 .row .delete-btn {
@@ -172,19 +177,31 @@ button:disabled {
     color: #555;
 }
 
-.row .details-btn {
-    margin-left: auto;      
+/* ---------- analytics chart ---------- */
+.range-btn {
+    margin-right: 8px;
 }
 
-.row .details-btn,
-.row .copy-btn,
-.row .edit-btn {
-    background: #eee;
-    color: #1a1a2e;
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0;
+    font-size: 0.85rem;
 }
 
-.row .details-btn:hover,
-.row .copy-btn:hover,
-.row .edit-btn:hover {
-    background: #ddd;
+.bar-date {
+    width: 48px;
+    color: #888;
+}
+
+.bar-row .bar {
+    height: 14px;
+    min-width: 2px;
+    background: #4a4de7;
+    border-radius: 3px;
+}
+
+.bar-count {
+    min-width: 24px;
 }

@@ -10,7 +10,7 @@ const nextBtn = document.getElementById('nextBtn')
 let page = 1
 const limit = 10
 
-// stops a stored URL from injecting HTML into the page
+//used to escape HTML special characters so that a string is treated as a text rather than HTML markup
 function escapeHtml(str) {
     return str
         .replace(/&/g, '&amp;')
@@ -69,6 +69,8 @@ document.getElementById('createForm').addEventListener('submit', async (e) => {
             body: JSON.stringify({ url: urlInput.value })
         })
         urlInput.value = ''
+
+        //takes you to the latest page where new link just got added
         page = 1
         loadLinks()
     } catch (err) {
