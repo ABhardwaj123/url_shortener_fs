@@ -4,7 +4,11 @@ const errorMsg = document.getElementById('errorMsg')
 
 if(loginForm){
 
+    //event represents the form submission even
     loginForm.addEventListener('submit' , async(event) => {
+        
+        //helps us to handle submission through JS rather than browser performing its natural submission behaviour
+        //we handle by sending data to backend etc
         event.preventDefault()
 
         const email = document.getElementById('email').value
