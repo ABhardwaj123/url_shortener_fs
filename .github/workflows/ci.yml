@@ -1,17 +1,33 @@
+#continuous integration
 name: CI
 
+#will run on when code is pushed or pull requests
 on:
   push:
   pull_request:
 
+#tasks that GitHub actions should execute
 jobs:
+
+#name of the job
   test:
+
+    #test is run on GitHub-hosted ubuntu VM
     runs-on: ubuntu-latest
     steps:
+        #checking out my repo into the runner
       - uses: actions/checkout@v4
+
+        #setting up node.js environment
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+
+          #enables npm dependency caching to speed up subsequent workflow 
           cache: npm
+
+        #commands to run
       - run: npm ci
       - run: npm test
+
+#this file is used to run my tests whenever some code is pushed to github
