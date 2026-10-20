@@ -1,6 +1,8 @@
 import { Link } from "../models/link.models.js";
 import { nanoid } from "nanoid";
 import normalizeUrl from "../utils/normalizeUrl.js";
+import { invalidateLink } from "../utils/cache.js"
+import { Click } from "../models/click.models.js";
 
 const createLink = async (req, res) => {
     try {
@@ -39,6 +41,7 @@ const createLink = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong" })
     }
 }
+
 
 const formatLink = (link) => ({
     id: link._id,
@@ -92,6 +95,7 @@ const getMyLinks = async (req, res) => {
     }
 }
 
+
 const getLink = async (req, res) => {
     try {
         // filtering by userId too means other users' links look like "not found"
@@ -120,16 +124,18 @@ const updateLink = async (req, res) => {
         }
 
         // find (owner only) and update in one step
-        // new: true returns the updated document instead of the old one
+        //return document after update has been applied
         const link = await Link.findOneAndUpdate(
             { shortCode: req.params.code, userId: req.user.id },
             { url: cleanUrl },
-            { new: true }
+            { returnDocument: "after" }
         )
 
         if (!link) {
             return res.status(404).json({ message: "link not found" })
         }
+
+        await invalidateLink(req.params.code)
 
         return res.status(200).json(formatLink(link))
     } catch (err) {
@@ -150,6 +156,8 @@ const deleteLink = async (req, res) => {
             return res.status(404).json({ message: "link not found" })
         }
 
+        await invalidateLink(req.params.code)
+
         return res.status(200).json({ message: "link deleted" })
     } catch (err) {
         console.error(err)
@@ -157,4 +165,71 @@ const deleteLink = async (req, res) => {
     }
 }
 
-export { createLink, getMyLinks, getLink, updateLink, deleteLink }
+
+const getAnalytics = async(req , res) => {
+
+    try{
+        const range = req.query.range === "30d" ? "30d" : "7d"
+        const days = range === "30d" ? 30 : 7
+        
+        //en-CA is just a locale that prints the date in order
+        const todayIST = new Date().toLocaleDateString("en-CA" , { timeZone: "Asia/Kolkata" })
+
+        const startOfDay = new Date(`${todayIST}T00:00:00+05:30`)
+        const since = new Date(startOfDay.getTime() - (days - 1) * 24 * 60 * 60 * 1000)
+
+        const link = await Link.findOne({
+            shortCode: req.params.code,
+            userId: req.user.id
+        })
+
+        if (!link) {
+            return res.status(404).json({ message: "link not found" })
+        }
+
+        const perDay = await Click.aggregate([
+            //match the timestamps that in range
+            { $match: { linkId: link._id , timestamp: { $gte: since }}},
+
+            {
+                $group: {
+                    _id: {
+                        $dateToString: {
+                            format: "%Y-%m-%d",
+                            date: "$timestamp",
+                            timezone: "Asia/Kolkata"
+                        }
+                    },
+
+                    clicks: { $sum: 1}
+                }
+            },
+
+            //oldest day first
+            { $sort: {_id: 1}}
+        ])
+
+        // date -> count
+        const counts = Object.fromEntries(perDay.map((day) => [day._id , day.clicks]))
+
+        const clicksPerDay = []
+
+        for(let i = 0; i < days ; i++){
+            const date = new Date(since.getTime() + i * 24 * 60 * 60 * 1000)
+                    .toLocaleDateString("en-CA" , { timeZone: "Asia/Kolkata" })
+            
+            clicksPerDay.push({date , clicks: counts[date] || 0})
+        }
+
+        const totalClicks = clicksPerDay.reduce((sum, day) => sum + day.clicks, 0)
+
+        return res.status(200).json({ range, totalClicks, clicksPerDay })
+
+    }catch(err){
+        console.error(err)
+        return res.status(500).json({ message: "Something went wrong" })
+    }
+}
+
+
+export { createLink, getMyLinks, getLink, updateLink, deleteLink , getAnalytics}
